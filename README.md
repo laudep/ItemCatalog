@@ -32,4 +32,4 @@ This project was made as part of the Udacity [Full-stack Web Developer Nanodegre
 - Use `vagrant ssh` to login to the VM
   <br><br>
 - Start the app by running `python application.py` within its root directory
-- Visit `https://localhost.5000/categories` with your web browser to load it
+- Visit `https://localhost.8000/categories` with your web browser to load it
