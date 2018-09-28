@@ -56,7 +56,7 @@ def showCatalogJSON():
 
 @app.route(
     '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON')
-    @app.route(
+@app.route(
     '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/json')
 def ItemJSON(category_id, catalog_item_id):
     """Returns JSON of selected item in catalog"""
