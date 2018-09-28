@@ -20,9 +20,18 @@ This project was made as part of the Udacity [Full-stack Web Developer Nanodegre
 - Facebook Login
 
 ## Dependencies
+### Vagrant VM
 - [Vagrant](https://www.vagrantup.com/)
 - [Udacity Vagrantfile](https://github.com/udacity/fullstack-nanodegree-vm)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
+### Custom Environment
+Instead of using the Udacity supplied Vagrant setup the app can run from any environment where the required dependencies are available.
+- [Python 2.7](https://www.python.org/downloads/)
+- [SQLite](https://www.sqlite.org/index.html)
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [Flask](http://flask.pocoo.org/)
+
 
 ## Getting Started
 - Download and install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
