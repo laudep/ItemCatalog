@@ -47,6 +47,7 @@ def login_required(f):
 # JSON APIs to show Catalog information
 # --------------------------------------
 @app.route('/api/v1/catalog/JSON')
+@app.route('/api/v1/catalog/json')
 def showCatalogJSON():
     """Returns JSON of all items in catalog"""
     items = session.query(Item).order_by(Item.id.desc())
@@ -55,6 +56,8 @@ def showCatalogJSON():
 
 @app.route(
     '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON')
+    @app.route(
+    '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/json')
 def ItemJSON(category_id, catalog_item_id):
     """Returns JSON of selected item in catalog"""
     Catalog_Item = session.query(
@@ -63,6 +66,7 @@ def ItemJSON(category_id, catalog_item_id):
 
 
 @app.route('/api/v1/categories/JSON')
+@app.route('/api/v1/categories/json')
 def categoriesJSON():
     """Returns JSON with all categories in catalog"""
     categories = session.query(Category).all()
