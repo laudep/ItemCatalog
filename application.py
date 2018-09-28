@@ -32,8 +32,6 @@ Base.metadata.bind = engine
 session = scoped_session(sessionmaker(bind=engine))
 
 # Login required decorator
-
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
