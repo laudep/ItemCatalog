@@ -34,11 +34,14 @@ Instead of using the Udacity supplied Vagrant setup the app can run from any env
 
 
 ## Getting Started
+### Preparation (Vagrant)
 - Download and install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - Clone the Vagrantfile from the [Udacity Repository](https://github.com/udacity/fullstack-nanodegree-vm)
 - Clone this repository into the `Vagrant` directory
 - Run the VM with `vagrant up`
 - Use `vagrant ssh` to login to the VM
   <br><br>
+### Running the application
 - Start the app by running `python application.py` within its root directory
 - Visit `https://localhost.8000/categories` with your web browser to load it
+- Add a few categories and items if running for the first time
