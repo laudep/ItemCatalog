@@ -43,5 +43,14 @@ Instead of using the Udacity supplied Vagrant setup the app can run from any env
   <br><br>
 ### Running the application
 - Start the app by running `python application.py` within its root directory
-- Visit `https://localhost.8000/categories` with your web browser to load it
+- Visit [https://localhost.8000/categories](https://localhost.8000/categories) with your web browser to load it
 - Add a few categories and items if running for the first time
+
+
+## JSON Endpoints
+The JSON Endpoints are case insensitive; `JSON` and `json` can be used interchangeably.
+| Data                   | URL                                                                          |
+|------------------------|------------------------------------------------------------------------------|
+| All catalog categories | `/api/v1/categories/JSON`                                                    |
+| Full item catalog      | `/api/v1/catalog/JSON`                                                       |
+| Single catalog item    | `/api/v1/categories/<int:category_id>`<br>`/item/<int:catalog_item_id>/JSON` |
