@@ -46,7 +46,7 @@ def login_required(f):
 # --------------------------------------
 # JSON APIs to show Catalog information
 # --------------------------------------
-@app.route('/api/v1/catalog.json')
+@app.route('/api/v1/catalog/JSON')
 def showCatalogJSON():
     """Returns JSON of all items in catalog"""
     items = session.query(Item).order_by(Item.id.desc())
