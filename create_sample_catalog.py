@@ -44,7 +44,8 @@ def createUser(name, email, picture):
 
 
 def checkPipInstalled():
-    """ Source: https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
+    """ Source:
+    https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
     # Check if pip is installed. If not, raise an ImportError
     PIP_INSTALLED = True
 
@@ -58,7 +59,8 @@ def checkPipInstalled():
 
 
 def install_and_import(package):
-    """ Source: https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
+    """ Source:
+    https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
     import importlib
     try:
         importlib.import_module(package)
@@ -83,7 +85,8 @@ clearDatabase()
 print "Generating sample data..."
 print
 sampleUser = createUser('Sample Data', 'john@smith.com',
-                        'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png')
+                        'https://upload.wikimedia.org/wikipedia/commons/7/' +
+                        '7c/Profile_avatar_placeholder_large.png')
 
 # supress BeautifulSoup warnings
 if not sys.warnoptions:
