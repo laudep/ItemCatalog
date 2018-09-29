@@ -1,6 +1,6 @@
 # Item Catalog
 
-A web application that provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users are able to post, edit and delete their own items.
+A web application that provides a list of items within a variety of categories as well as provide a user registration and authentication system. Everyone can view the catalog. Registered users are able to post, edit and delete their own items.
 
 ## About
 
@@ -40,11 +40,21 @@ Instead of using the Udacity supplied Vagrant setup the app can run from any env
 - Clone this repository into the `Vagrant` directory
 - Run the VM with `vagrant up`
 - Use `vagrant ssh` to login to the VM
-  <br><br>
+- (Optional) run the sample data generator script (see below)
+
+### Adding sample data
+Warning: the steps below will overwrite any existing data.<br>
+The sample data generator uses the [Wikipedia API](https://pypi.org/project/wikipedia/).<br>
+To run generate sample data use the following commands:
+- `pip install wikipedia` (if Wikipedia module isn't installed yet)
+- `python create_sample_catalog.py`
+- alternativly run `sudo python create_sample_catalog.py` to automatically install Wikipedia if needed
+
 ### Running the application
 - Start the app by running `python application.py` within its root directory
 - Visit [https://localhost.8000/categories](https://localhost.8000/categories) with your web browser to load it
-- Add a few categories and items if running for the first time
+- If the sample data generator wasn't used add a few categories and items if running for the first time
+
 
 
 ## JSON Endpoints
