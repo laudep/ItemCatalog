@@ -31,6 +31,11 @@ Base.metadata.bind = engine
 
 session = scoped_session(sessionmaker(bind=engine))
 
+# Unauthorized alert
+ALERT_UNAUTHORIZED = ("<script>function myFunction() {"
+                      "alert('You are not authorized!')}"
+                      "</script><body onload='myFunction()'>")
+
 # Login required decorator
 
 
@@ -125,7 +130,7 @@ def editCategory(category_id):
     editedCategory = session.query(
         Category).filter_by(id=category_id).first()
     if editedCategory.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized!')}</script><body onload='myFunction()'>"  # noqa
+        return ALERT_UNAUTHORIZED
     if request.method == 'POST':
         if request.form['name']:
             editedCategory.name = request.form['name']
@@ -152,7 +157,7 @@ def deleteCategory(category_id):
     categoryToDelete = session.query(
         Category).filter_by(id=category_id).first()
     if categoryToDelete.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized!')}</script><body onload='myFunction()'>"  # noqa
+        return ALERT_UNAUTHORIZED
     if request.method == 'POST':
         session.delete(categoryToDelete)
         flash('%s Successfully Deleted' % categoryToDelete.name, 'success')
@@ -233,7 +238,7 @@ def editItem(category_id, catalog_item_id):
     editedItem = session.query(
         Item).filter_by(id=catalog_item_id).first()
     if editedItem.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized!')}</script><body onload='myFunction()'>"  # noqa
+        return ALERT_UNAUTHORIZED
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -264,7 +269,7 @@ def deleteItem(category_id, catalog_item_id):
     itemToDelete = session.query(
         Item).filter_by(id=catalog_item_id).first()
     if itemToDelete.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized!')}</script><body onload='myFunction()'>"  # noqa
+        return ALERT_UNAUTHORIZED
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
@@ -303,8 +308,9 @@ def fbconnect():
         'web']['app_id']
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (  # noqa
-        app_id, app_secret, access_token)
+    url = ('https://graph.facebook.com/oauth/access_token?grant_type='
+           'fb_exchange_token&client_id=%s&client_secret=%s&'
+           'fb_exchange_token=%s') % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
@@ -313,7 +319,8 @@ def fbconnect():
     # strip expire tag from access token
     token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v3.1/me?fields=id%2Cname%2Cemail%2Cpicture&access_token=' + access_token  # noqa
+    url = ('https://graph.facebook.com/v3.1/me?fields=id'
+           '%2Cname%2Cemail%2Cpicture&access_token=') + access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -343,7 +350,8 @@ def fbconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '  # noqa
+    output += (' " style = "width: 300px; height: 300px;border-radius: 150px;'
+               '-webkit-border-radius: 150px;-moz-border-radius: 150px;"> ')
 
     flash("Now logged in as %s." % login_session['username'], 'success')
     return output
@@ -355,7 +363,8 @@ def fbdisconnect():
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id, access_token)  # noqa
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (
+        facebook_id, access_token)
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "You have been logged out."
@@ -454,7 +463,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '  # noqa
+    output += (' " style = "width: 300px; height: 300px;border-radius: 150px;'
+               '-webkit-border-radius: 150px;-moz-border-radius: 150px;"> ')
     flash("You are now logged in as %s" % login_session['username'], 'success')
     print("done!")
     return output
@@ -472,7 +482,7 @@ def gdisconnect():
         return response
     # execute HTTP GET request to revoke current token
     access_token = credentials.access_token
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token  # noqa
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_toke
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
