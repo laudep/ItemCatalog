@@ -45,6 +45,7 @@ Instead of using the Udacity supplied Vagrant setup the app can run from any env
 ### Adding sample data
 Warning: the steps below will overwrite any existing data.<br>
 The sample data generator uses the [Wikipedia API](https://pypi.org/project/wikipedia/).<br>
+Please note internet connection is required for fetching item descriptions.
 To run generate sample data use the following commands:
 - `pip install wikipedia` (if Wikipedia module isn't installed yet)
 - `python create_sample_catalog.py`
