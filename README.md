@@ -60,6 +60,7 @@ To run generate sample data use the following commands:
 
 ## JSON Endpoints
 The JSON Endpoints are case insensitive; `JSON` and `json` can be used interchangeably.
+
 | Data                   | URL                                                                          |
 |------------------------|------------------------------------------------------------------------------|
 | All catalog categories | `/api/v1/categories/JSON`                                                    |
