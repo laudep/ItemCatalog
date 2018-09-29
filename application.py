@@ -106,6 +106,9 @@ def newCategory():
         newCategory = Category(
             name=request.form['name'],
             user_id=login_session['user_id'])
+        if not newCategory.name:
+            flash("Category name is required.", "warning")
+            return render_template('new_category.html')
         session.add(newCategory)
         session.commit()
         flash("New category created!", 'success')
