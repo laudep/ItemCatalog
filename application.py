@@ -31,8 +31,9 @@ Base.metadata.bind = engine
 
 session = scoped_session(sessionmaker(bind=engine))
 
-
 # Login required decorator
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -203,6 +204,9 @@ def newItem():
             price=request.form['price'],
             category_id=request.form['category'],
             user_id=login_session['user_id'])
+        if not addNewItem.name:
+            flash("Item name is required.", "warning")
+            return render_template('new_item.html', categories=categories)
         session.add(addNewItem)
         session.commit()
         flash("New item created.", 'success')
