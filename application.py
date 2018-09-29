@@ -36,10 +36,9 @@ ALERT_UNAUTHORIZED = ("<script>function myFunction() {"
                       "alert('You are not authorized!')}"
                       "</script><body onload='myFunction()'>")
 
-# Login required decorator
-
 
 def login_required(f):
+    """Login required decorator."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in login_session:
@@ -54,7 +53,7 @@ def login_required(f):
 @app.route('/api/v1/catalog/JSON')
 @app.route('/api/v1/catalog/json')
 def showCatalogJSON():
-    """Returns JSON of all items in catalog"""
+    """Return JSON of all items in catalog"""
     items = session.query(Item).order_by(Item.id.desc())
     return jsonify(Items=[i.serialize for i in items])
 
@@ -64,7 +63,7 @@ def showCatalogJSON():
 @app.route(
     '/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/json')
 def ItemJSON(category_id, catalog_item_id):
-    """Returns JSON of selected item in catalog"""
+    """Return JSON of selected item in catalog"""
     Catalog_Item = session.query(
         Item).filter_by(id=catalog_item_id).first()
     return jsonify(Catalog_Item=Catalog_Item.serialize)
@@ -73,7 +72,7 @@ def ItemJSON(category_id, catalog_item_id):
 @app.route('/api/v1/categories/JSON')
 @app.route('/api/v1/categories/json')
 def categoriesJSON():
-    """Returns JSON with all categories in catalog"""
+    """Return JSON with all categories in catalog"""
     categories = session.query(Category).all()
     return jsonify(Categories=[r.serialize for r in categories])
 
@@ -85,7 +84,7 @@ def categoriesJSON():
 @app.route('/')
 @app.route('/categories/')
 def showCatalog():
-    """Returns catalog page with all categories and recently added items"""
+    """Return catalog page with all categories and recently added items"""
     categories = session.query(Category).all()
     items = session.query(Item).order_by(Item.id.desc())
     quantity = items.count()
@@ -103,7 +102,7 @@ def showCatalog():
 @app.route('/categories/new', methods=['GET', 'POST'])
 @login_required
 def newCategory():
-    """Allows user to create new category"""
+    """Allow user to create new category"""
     if request.method == 'POST':
         print(login_session)
         if 'user_id' not in login_session and 'email' in login_session:
@@ -126,7 +125,7 @@ def newCategory():
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
 @login_required
 def editCategory(category_id):
-    """Allows user to edit an existing category"""
+    """Allow user to edit an existing category"""
     editedCategory = session.query(
         Category).filter_by(id=category_id).first()
     if editedCategory.user_id != login_session['user_id']:
@@ -153,7 +152,7 @@ def editCategory(category_id):
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
 @login_required
 def deleteCategory(category_id):
-    """Allows user to delete an existing category"""
+    """Allow user to delete an existing category"""
     categoryToDelete = session.query(
         Category).filter_by(id=category_id).first()
     if categoryToDelete.user_id != login_session['user_id']:
@@ -176,7 +175,14 @@ def deleteCategory(category_id):
 @app.route('/categories/<int:category_id>/')
 @app.route('/categories/<int:category_id>/items/')
 def showCategoryItems(category_id):
-    """returns items in category"""
+    """Return all items in given category.
+
+    Args:
+        category_id (int): The id of the category of the items.
+
+    Returns:
+        The rendered catalog template with all item data.
+    """
     category = session.query(Category).filter_by(id=category_id).first()
     categories = session.query(Category).all()
     creator = getUserInfo(category.user_id)
@@ -196,7 +202,15 @@ def showCategoryItems(category_id):
 # READ ITEM - shows specific information for a given item
 @app.route('/categories/<int:category_id>/item/<int:catalog_item_id>/')
 def showItem(category_id, catalog_item_id):
-    """returns category item"""
+    """Return a single catalog item
+
+    Args:
+        category_id     (int): The id of the item category.
+        catalog_item_id (int): The id of the item.
+
+    Returns:
+        The rendered catalog template.
+    """
     category = session.query(Category).filter_by(id=category_id).first()
     item = session.query(
         Item).filter_by(id=catalog_item_id).first()
@@ -210,6 +224,7 @@ def showItem(category_id, catalog_item_id):
 @app.route('/categories/item/new', methods=['GET', 'POST'])
 @login_required
 def newItem():
+    """Handle new catalog item creation"""
     categories = session.query(Category).all()
     if request.method == 'POST':
         addNewItem = Item(
@@ -235,6 +250,12 @@ def newItem():
     methods=['GET', 'POST'])
 @login_required
 def editItem(category_id, catalog_item_id):
+    """Handle catalog item editing
+
+    Args:
+        category_id     (int): The id of the item category.
+        catalog_item_id (int): The id of the item to edit.
+    """
     editedItem = session.query(
         Item).filter_by(id=catalog_item_id).first()
     if editedItem.user_id != login_session['user_id']:
@@ -266,6 +287,12 @@ def editItem(category_id, catalog_item_id):
     methods=['GET', 'POST'])
 @login_required
 def deleteItem(category_id, catalog_item_id):
+    """Handle catalog item deletion
+
+    Args:
+        category_id     (int): The id of the item category.
+        catalog_item_id (int): The id of the item to delete.
+    """
     itemToDelete = session.query(
         Item).filter_by(id=catalog_item_id).first()
     if itemToDelete.user_id != login_session['user_id']:
@@ -287,6 +314,7 @@ def deleteItem(category_id, catalog_item_id):
 # Login route, create anit-forgery state token
 @app.route('/login')
 def showLogin():
+    """Show the login screen"""
     state = ''.join(
         random.choice(
             string.ascii_uppercase + string.digits) for x in xrange(32))
@@ -294,9 +322,9 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-# Connect FB login
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    """Handle Facebook OAuth login"""
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -357,9 +385,9 @@ def fbconnect():
     return output
 
 
-# disconnect FB login
 @app.route('/fbdisconnect')
 def fbdisconnect():
+    """Handle Facebook OAuth logout"""
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
@@ -373,6 +401,7 @@ def fbdisconnect():
 # CONNECT - Google login get token
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """Handle Google OAuth login"""
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -473,6 +502,7 @@ def gconnect():
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
+    """Handle Google OAuth logout"""
     # only disconnect a connected user
     credentials = login_session.get('credentials')
     if credentials is None:
@@ -508,6 +538,14 @@ def gdisconnect():
 
 # User helper functions
 def getUserId(email):
+    """Get a user id given an email address
+
+    Args:
+        email (str): The email address of the user.
+
+    Returns:
+        int: The user's id
+    """
     try:
         user = session.query(User).filter_by(email=email).first()
         return user.id
@@ -516,11 +554,27 @@ def getUserId(email):
 
 
 def getUserInfo(user_id):
+    """Get user info given an id
+
+    Args:
+        user_id (int): The user's id
+
+    Returns:
+        User: The user object
+    """
     user = session.query(User).filter_by(id=user_id).first()
     return user
 
 
 def createUser(login_session):
+    """Save the currently logged in user in the database
+
+    Args:
+        login_session (Tuple[string]): The current login session.
+
+    Returns:
+        int: The created user's id
+    """
     newUser = User(
         name=login_session['username'],
         email=login_session['email'],
@@ -531,9 +585,9 @@ def createUser(login_session):
     return user.id
 
 
-# Disconnect based on provider
 @app.route('/disconnect')
 def disconnect():
+    """Handle logout/disconnect based on provider"""
     print(login_session)
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
