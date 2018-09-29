@@ -129,10 +129,16 @@ def editCategory(category_id):
     if request.method == 'POST':
         if request.form['name']:
             editedCategory.name = request.form['name']
+            session.add(editedCategory)
+            session.commit()
             flash(
-                'Category Successfully Edited %s' % editedCategory.name,
+                'Successfully edited category "%s".' % editedCategory.name,
                 'success')
             return redirect(url_for('showCatalog'))
+        else:
+            flash("Category name is required.", "warning")
+            return render_template('edit_category.html',
+                                   category=editedCategory)
     else:
         return render_template(
             'edit_category.html', category=editedCategory)
