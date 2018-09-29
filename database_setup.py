@@ -7,6 +7,14 @@ Base = declarative_base()
 
 
 class User(Base):
+    """Class for user data
+
+    Attributes:
+        id      (int): user id
+        name    (str): name of the user
+        email   (str): user email address
+        picture (str): URL for user picture
+    """
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
@@ -15,6 +23,13 @@ class User(Base):
 
 
 class Category(Base):
+    """Class for category data
+
+    Attributes:
+        id      (int): category id
+        name    (str): category name
+        user_id (int): id of user who created the category
+    """
     __tablename__ = 'category'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
@@ -31,6 +46,17 @@ class Category(Base):
 
 
 class Item(Base):
+    """Class for catalog item data
+
+    Attributes:
+        id          (int): category id
+        name        (str): item name
+        description (str): item description
+        category_id (int): id of the corresponding item category
+        price       (str): price for the item
+        user_id     (int): id of user who created the category
+    """
+
     __tablename__ = 'catalog_item'
 
     name = Column(String(80), nullable=False)
