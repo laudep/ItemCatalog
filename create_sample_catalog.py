@@ -10,8 +10,22 @@ from database_setup import *
 from application import session
 
 
+def clearDatabase():
+    """Delete all tables and recreate"""
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+
+
 def createCategory(name, user_id):
-    """ Create an item category """
+    """Create a new item category
+
+    Args:
+        name    (str): The name for the category.
+        user_id (int): The id of the creating user.
+
+    Returns:
+        Category: The created Category object.
+    """
     c = Category(name=name, user_id=user_id)
     session.add(c)
     session.commit()
@@ -20,7 +34,17 @@ def createCategory(name, user_id):
 
 
 def createItem(name, category, price, user_id):
-    """ Create an item """
+    """Create a new catalog item
+
+    Args:
+        name     (str): The name for the item.
+        category (obj): The category object.
+        price    (str): The item price.
+        user_id  (int): The id of the creating user.
+
+    Returns:
+        Item: The created Item object.
+    """
     try:
         description = wikipedia.summary(name)
     except wikipedia.exceptions.DisambiguationError as e:
@@ -35,7 +59,16 @@ def createItem(name, category, price, user_id):
 
 
 def createUser(name, email, picture):
-    """ Create a user """
+    """Create a new user
+
+    Args:
+        name    (str): The name for the user.
+        email   (str): The user's email address.
+        picture (str): The URL for the user avatar.
+
+    Returns:
+        User: The created User object.
+    """
     u = User(name=name, email=email, picture=picture)
     session.add(u)
     session.commit()
@@ -44,9 +77,11 @@ def createUser(name, email, picture):
 
 
 def checkPipInstalled():
-    """ Source:
+    """Check if pip is installed. If not, raise an ImportError.
+
+    Source:
     https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
-    # Check if pip is installed. If not, raise an ImportError
+
     PIP_INSTALLED = True
 
     try:
@@ -59,8 +94,10 @@ def checkPipInstalled():
 
 
 def install_and_import(package):
-    """ Source:
-    https://github.com/anhaidgroup/py_entitymatching/blob/master/setup.py """
+    """Import a given package after installing it when needed.
+
+    Args:
+        package (str): The name of the package to be imported."""
     import importlib
     try:
         importlib.import_module(package)
