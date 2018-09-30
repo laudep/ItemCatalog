@@ -77,6 +77,7 @@ class Item(Base):
             'name': self.name,
             'description': self.description,
             'price': '$' + self.price,
+            'category_id': self.category_id,
             'user_id': self.user_id
         }
 
